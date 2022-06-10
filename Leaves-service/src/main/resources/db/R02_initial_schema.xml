@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="02" author="SAB">
+        <createTable tableName="employee_leaves" >
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="employee_id" type="bigint">
+                <constraints primaryKey="true" foreignKeyName="fk_employee_leaves" references="employee(id)"/>
+            </column>
+            <column name="leave_type" type="varchar(255)"/>
+            <column name="leave_date" type="timestamp"/>
+            <column name="creation_date" type="timestamp"/>
+            <column name="update_date" type="timestamp"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="SAB" id="tagDatabase">
+        <tagDatabase tag="v0.0.1"/>
+    </changeSet>
+</databaseChangeLog>

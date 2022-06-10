@@ -1,0 +1,11 @@
+spring.profiles.active=staging
+logging.level.liquibase=INFO
+-Dlogging.level.com.stc.employee=INFO
+logging.file.name=logs/employee.log
+spring.application.name=employee
+spring.mvc.pathmatch.matching-strategy=ANT_PATH_MATCHER
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.jpa.database-platform = org.hibernate.dialect.MySQL5Dialect
+spring.datasource.hikari.maximum-pool-size=100
+spring.datasource.hikari.minimum-idle=10
+spring.output.ansi.enabled=ALWAYS
