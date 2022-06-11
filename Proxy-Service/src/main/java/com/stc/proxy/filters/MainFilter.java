@@ -42,7 +42,7 @@ public class MainFilter extends ZuulFilter {
     @Override
     public Object run() throws ZuulException {
         RequestContext context = RequestContext.getCurrentContext();
-        List<ServiceInstance> instances = discoveryClient.getInstances("proxy");
+        List<ServiceInstance> instances = discoveryClient.getInstances(context.get("serviceId").toString());
         try {
             if (instances != null && instances.size() > 0) {
                 context.setRouteHost(instances.get(0).getUri().toURL());

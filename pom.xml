@@ -17,8 +17,8 @@
 	
 	<modules>
 		<module>Proxy-Service</module>
-<!--		<module>Leaves-service</module>-->
-<!--		<module>Employee-service</module>-->
+		<module>Leaves-service</module>
+		<module>Employee-service</module>
 		<module>Eureka</module>
 	</modules>	
 	
