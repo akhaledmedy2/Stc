@@ -1,3 +1,4 @@
+version: "1.0"
 services:
   mysql:
     image: mysql:latest
@@ -5,11 +6,15 @@ services:
       - MYSQL_ROOT_PASSWORD=root
     ports:
       - 3307:3306
+    networks:
+      - employee-network
     volumes:
       - data:/var/lib/mysql
 
   employee:
     build:  .
+    networks:
+      - employee-network
     image: employee:latest
     ports:
       - 8090:8080
@@ -17,18 +22,24 @@ services:
 
   employee-leaves:
     build: .
+    networks:
+      - employee-network
     image: employee-leaves:latest
     ports:
       - 9090:8080
       
   eureka:
     build: .
+    networks:
+      - employee-network
     image: discovery-server:latest
     ports:
       - 8762:8761
       
   proxy:
     build: .
+    networks:
+      - employee-network
     image: proxy-service:latest
     ports:
       - 9006:9005
