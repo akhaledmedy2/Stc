@@ -5,23 +5,33 @@ import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Component
 public class MainFilter extends ZuulFilter {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    private final DiscoveryClient discoveryClient;
+
+    public MainFilter(DiscoveryClient discoveryClient) {
+        this.discoveryClient = discoveryClient;
+    }
+
     @Override
     public String filterType() {
-        return "pre";
+        return "route";
     }
 
     @Override
     public int filterOrder() {
-        return 1;
+        return 0;
     }
 
     @Override
@@ -31,8 +41,17 @@ public class MainFilter extends ZuulFilter {
 
     @Override
     public Object run() throws ZuulException {
-        HttpServletRequest request = RequestContext.getCurrentContext().getRequest();
-        logger.info("request -> {} request uri-> {}", request, request.getRequestURI());
+        RequestContext context = RequestContext.getCurrentContext();
+        List<ServiceInstance> instances = discoveryClient.getInstances("proxy");
+        try {
+            if (instances != null && instances.size() > 0) {
+                context.setRouteHost(instances.get(0).getUri().toURL());
+            } else {
+                throw new IllegalStateException("Target service instance not found!");
+            }
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Couldn't get service URL!", e);
+        }
         return null;
     }
 }
